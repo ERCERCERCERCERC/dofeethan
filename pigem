@@ -1,0 +1,89 @@
+import sys
+sys.path.append(r'H:\py')
+import pygame
+from random import randint
+pygame.init()
+w = 810
+h = 540
+screen = pygame.display.set_mode((w, h))
+GREY = (200, 200, 200)
+BLACK = (0,0,0)
+WHITE = (255,255,255)
+background = GREY
+x = 0
+y = 0
+pw = 50
+ph = 50
+yv=0
+xv=0
+W = False
+A = False
+S = False
+D = False
+
+while True:
+    screen.fill(background)
+    
+    player = pygame.Rect(x, y, pw, ph)
+
+    if W and yv >= -0.3:
+        yv -= 0.001
+    if S and yv <= 0.3:
+        yv += 0.001
+    if D and xv <= 0.3:
+        xv += 0.001
+    if A and xv >= -0.3:
+        xv -= 0.001
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_w and y < w-(ph/2):
+                W = True
+            elif event.key == pygame.K_s:
+                S = True
+            elif event.key == pygame.K_d:
+                D = True
+            elif event.key == pygame.K_a:
+                A = True
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_w and y < w-(ph/2):
+                W = False
+            elif event.key == pygame.K_s:
+                S = False
+            elif event.key == pygame.K_d:
+                D = False
+            elif event.key == pygame.K_a:
+                A = False
+
+        
+
+
+        
+
+
+
+            
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        
+    y+=yv
+    x+=xv
+    if x < 0:
+        x = 0
+        xv = -0.6*xv 
+    elif x > w - pw:       # 810 - 50 = 760
+        x = w - pw
+        xv = -0.6*xv 
+
+    if y < 0:
+        y = 0
+        yv = -0.6*yv 
+    elif y > h - ph:       # 540 - 50 = 490
+        y = h - ph
+        yv = -0.6*yv
+    pygame.draw.rect(screen, WHITE, player)
+    pygame.display.update()
+
+
+
+pygame.quit()

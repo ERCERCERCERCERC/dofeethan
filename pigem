@@ -87,3 +87,141 @@ while True:
 
 
 pygame.quit()
+
+
+
+
+
+
+#new
+import sys
+sys.path.append(r'H:\py')
+import pygame
+from random import randint
+pygame.init()
+w = 810
+h = 540
+screen = pygame.display.set_mode((w, h))
+GREY = (200, 200, 200)
+BLACK = (0,0,0)
+WHITE = (255,255,255)
+background = GREY
+x = 0
+y = 0
+pw = 50
+ph = 50
+yv=0
+xv=0
+W = False
+A = False
+S = False
+D = False
+
+
+
+def trig(xv,yv):
+    # to annoy jije
+    angle_rad = math.atan2(xv, yv)
+
+    # hahahahahehehehehehe
+    direction = math.degrees(angle_rad)
+    return direction
+    
+
+def compute(direction):
+    # mwahahahah
+    angle_rad = math.radians(direction)
+
+    # Calculate X and Y velocity components
+    xv = speed * math.cos(angle_rad)
+    yv = speed * math.sin(angle_rad)
+    return xv,yv
+
+
+
+
+while True:
+    screen.fill(background)
+    block = pygame.Rect(405, 270, 100,100)
+    player = pygame.Rect(x, y, pw, ph)
+    yv += 0.0002
+    if W and yv >= -0.3:
+        if y >= h - ph:
+            yv -= 0.302
+    if S and yv <= 0.3:
+        yv += 0.001
+    if D and xv <= 0.3:
+        xv += 0.0005
+    if A and xv >= -0.3:
+        xv -= 0.0005
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_w and y < w-(ph/2):
+                W = True
+            elif event.key == pygame.K_s:
+                S = True
+            elif event.key == pygame.K_d:
+                D = True
+            elif event.key == pygame.K_a:
+                A = True
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_w and y < w-(ph/2):
+                W = False
+            elif event.key == pygame.K_s:
+                S = False
+            elif event.key == pygame.K_d:
+                D = False
+            elif event.key == pygame.K_a:
+                A = False
+
+        
+
+
+        
+
+
+
+            
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        
+    y+=yv
+    x+=xv
+    if x < 0:
+        x = 0
+        xv = -0.6*xv 
+    elif x > w - pw:       # 810 - 50 = 760
+        x = w - pw
+        xv = -0.6*xv 
+
+    if y < 0:
+        y = 0
+        yv = 0 
+    elif y > h - ph:       # 540 - 50 = 490
+        y = h - ph
+        yv = -0.6*yv
+    if x < 505 and x > 355 and y > 220 and y < 370:
+        d = trig(xv, yv)
+        if xv < 0 and yv < 0:
+            x += 3
+            y += 3
+            
+        elif xv < 0 and yv > 0:
+            x += 3
+            y -= 3
+        elif xv > 0 and yv < 0:
+            x -= 3
+            y += 3
+        elif xv > 0 and yv > 0:
+            x -= 3
+            y -= 3
+
+
+    pygame.draw.rect(screen, WHITE, player)
+    pygame.draw.rect(screen, BLACK, block)
+    pygame.display.update()
+
+
+
+pygame.quit()

@@ -225,3 +225,121 @@ while True:
 
 
 pygame.quit()
+
+
+
+
+#newwwwwww
+
+import sys
+sys.path.append(r'H:\py')
+import pygame
+import math
+from random import randint
+pygame.init()
+w = 800
+h = 600
+screen = pygame.display.set_mode((w, h))
+GREY = (200, 200, 200)
+BLACK = (0,0,0)
+WHITE = (255,255,255)
+background = GREY
+coordinates = pygame.Vector2(0,0)
+velocity = pygame.Vector2(0,0)
+pw = 50
+ph = 50
+W = False
+A = False
+S = False
+D = False
+while True:
+    #generation
+    screen.fill(background)
+    block = pygame.Rect(405, 270, 100,100)
+    player = pygame.Rect(coordinates.x, coordinates.y, pw, ph)
+    
+    #gravi-tea
+    velocity.y += 0.0002
+    #max speed
+    if W and velocity.y >= -0.3:
+        #if coordinates.y >= h - ph:
+        velocity.y -= 0.302
+    if S and velocity.y <= 0.3:
+        velocity.y += 0.001
+    if D and velocity.x <= 0.3:
+        velocity.x += 0.0005
+    if A and velocity.x >= -0.3:
+        velocity.x -= 0.0005
+
+    '''
+    movement
+    '''
+    
+    
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_w:# and coordinates.y < w-(ph/2):
+                W = True
+            elif event.key == pygame.K_s:
+                S = True
+            elif event.key == pygame.K_d:
+                D = True
+            elif event.key == pygame.K_a:
+                A = True
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_w:# and coordinates.y < w-(ph/2):
+                W = False
+            elif event.key == pygame.K_s:
+                S = False
+            elif event.key == pygame.K_d:
+                D = False
+            elif event.key == pygame.K_a:
+                A = False
+
+        
+
+
+        
+
+
+
+        #exiting            
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        
+    coordinates += velocity
+    #boundaries and bouncing
+    if player.left < 0 or player.right > 800:
+        velocity.reflect_ip(pygame.Vector2(1, 0))
+        coordinates.x = max(0, min(coordinates.x, 800 - player.width))
+        player.topleft = coordinates
+        velocity.x = 0.6* velocity.x
+        velocity.y = 0.6* velocity.y
+    if player.top < 0 or player.bottom > 600:
+        velocity.reflect_ip(pygame.Vector2(0, 1))
+        coordinates.y = max(0, min(coordinates.y, 600 - player.height))
+        player.topleft = coordinates
+        velocity.x = 0.6* velocity.x
+        velocity.y = 0.6* velocity.y
+    if player.colliderect(block):
+        overlap = player.clip(block)
+
+        if overlap.width < overlap.height:
+            velocity.reflect_ip(pygame.Vector2(1,0))
+            coordinates.x -= overlap.width if velocity.x < 0 else -overlap.width
+
+        if overlap.width > overlap.height:
+            velocity.reflect_ip(pygame.Vector2(0,1))
+            coordinates.y -= overlap.height if velocity.y < 0 else -overlap.height
+        velocity.x = 0.6* velocity.x
+        velocity.y = 0.6* velocity.y
+    player.topleft = coordinates
+    #rendering
+    pygame.draw.rect(screen, WHITE, player)
+    pygame.draw.rect(screen, BLACK, block)
+    pygame.display.update()
+
+
+#useless comment hehe
+pygame.quit()

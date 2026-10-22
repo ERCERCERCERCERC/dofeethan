@@ -1,0 +1,19 @@
+def correct(question, ty):
+    ans = 'a'
+    while type(ans) is not ty:
+        ans = input(question)
+        try: ans = ty(ans)
+        except Exception: pass
+    return ty(ans)
+    
+def calc(func,num1,num2):
+    ops = "+-*/"
+    print(eval(f'{num1}{ops[func-1]}{num2}'))
+    
+func = correct('function. 1 for +, 2 for -, 3 for *, 4 for /',int)
+num1 = correct('what numba ya wanna dooo',float)
+num2 = correct('other numba ya wanna dooooooooooooooo',float)
+if func not in [1,2,3,4]:
+    print('comply by my ruuuuuuuleeeees. either go away or retry')
+else:
+    calc(func,num1,num2)
